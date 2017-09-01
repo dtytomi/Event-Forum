@@ -1,5 +1,3 @@
-import { HTTP_PROVIDERS } from '@angular/http';
-
 import {AuthService} from './shared/services/auth.service';
 import {DataService} from './shared/services/data.service';
 import {SqliteService} from './shared/services/sqlite.service';
@@ -11,6 +9,5 @@ export const APP_PROVIDERS = [
   DataService,
   SqliteService,
   ItemsService,
-  MappingsService,
-  HTTP_PROVIDERS
+  MappingsService
 ];

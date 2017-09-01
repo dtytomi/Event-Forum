@@ -1,0 +1,50 @@
+<!--
+  Generated template for the ThreadCreatePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>New Thread</ion-title>
+    <ion-buttons start>
+    	<button (click)="cancelNewThread()">
+    		<ion-icon name="arrow-back"></ion-icon> Cancel
+    	</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<form [formGroup]="createThreadForm" (ngSubmit)="onSubmit(createThreadForm.value)">
+	  <ion-item [class.error]="!title.valid && title.touched">
+	  	<ion-label floating>Title</ion-label>
+	    <ion-input type="text" value="" [formControl]="title"></ion-input>
+	  </ion-item>
+	  <div *ngIf="title.hasError('required') && title.touched" class="error-box">* Title is required.</div>
+	  <div *ngIf="title.hasError('isValid') && title.touched" class="error-box">* Minimum title lenght is 8.</div>
+	  <ion-item [class.error]="!question.valid && question.touched">
+	  	<ion-label floating>Question</ion-label>
+	    <ion-textarea type="text" value="" [formControl]="question" row="6"></ion-textarea>
+	  </ion-item>
+	  <div *ngIf="question.hasError('required') && question.touched" class="error-box">* Question is required.</div>
+	  <div *ngIf="question.hasError('isValid') && question.touched" class="error-box">* Type at least 100 characters.</div>
+	  <ion-item>
+      <ion-label color="primary">Category</ion-label>
+      <ion-select [formGroup]="category" name="category" multiple="false" required>
+      	<ion-option value="Catering" checked="true">Catering</ion-option>
+        <ion-option value="Party" >Party</ion-option>
+        <ion-option value="Birthday" >Birthday</ion-option>
+        <ion-option value="Wedding" >Wedding</ion-option>
+        <ion-option value="Namings" >Namings</ion-option>
+      </ion-select>
+    </ion-item>
+    <div *ngIf="category.hasError('minlength')" class="error-box">* Select at least one category.</div>
+		<br />
+		<br /> 
+		<button type="submit" class="custom-button" [disabled]="!createThreadForm.valid" block>Submit</button>
+	</form>
+</ion-content>

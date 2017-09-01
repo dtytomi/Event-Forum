@@ -31,3 +31,7 @@ export interface IUser {
 export interface Predicate<T> {
   (item: T): boolean;
 }
+
+export interface ValidationResult {
+    [key: string]: boolean;
+}

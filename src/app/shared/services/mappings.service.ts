@@ -1,12 +1,12 @@
-import { injectables } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { IThread, IComment } from '../interfaces';
-import { ItemService } from '../services/items.service';
+import { ItemsService } from '../services/items.service';
 
-@Injectables
+@Injectable()
 export class MappingsService {
 
-  constructor(private itemsService: ItemService) { }
+  constructor(private itemsService: ItemsService) { }
 
   getThreads(snapshot: any): Array<IThread> {
     let threads: Array<IThread> = [];
@@ -20,7 +20,7 @@ export class MappingsService {
 
       threads.push({
         key: key,
-        thread: thread.title,
+        title: thread.title,
         question: thread.question,
         category: thread.category,
         dateCreated: thread.dateCreated,
@@ -35,23 +35,21 @@ export class MappingsService {
   }
 
   getThread(snapshot: any, key: string): IThread {
-    let thread: IThread {
-        key: null,
-        title: 'Welcome to Forum!',
-        question: 'Congratulations! It seems that you have successfully setup the Forum app.',
-        category: 'welcome',
-        dateCreated: new Date().toString(),
-        user: {uid: 'default', username: 'Administrator'},
-        comments: 0 
-      };
 
-    let firstThreadRef = self.threadRef.push();
-
+    let thread: IThread = {
+      key: key,
+      title: snapshot.title,
+      question: snapshot.question,
+      category: snapshot.category,
+      dateCreated: snapshot.dateCreated,
+      user: snapshot.user,
+      comments: snapshot.comments == null ? 0 : snapshot.comments 
+    };
 
     return thread;
-
   }
 
+  
   getComments(snapshot: any): Array<IComment> {
     let comments: Array<IComment> = [];
     if(snapshot.val() == null)
@@ -62,16 +60,16 @@ export class MappingsService {
     Object.keys(snapshot.val()).map((key: any) => {
       let comment: any = list[key];
 
-      this.itemService.groupByBoolean(comment.votes, true);
+      this.itemsService.groupByBoolean(comment.votes, true);
 
       comments.push({
         key: key,
-        thread: comment.thread,
         text: comment.text,
-        user: comment.user,
+        thread: comment.thread,
         dateCreated: comment.dateCreated,
-        votesUp: this.itemService.groupByBoolean(comment.votes, true),
-        votesDown:this.itemService.groupByBoolean(comment.votes, false)
+        user: comment.user,
+        votesUp: this.itemsService.groupByBoolean(comment.votes, true),
+        votesDown:this.itemsService.groupByBoolean(comment.votes, false)
       });
 
     });
@@ -80,8 +78,10 @@ export class MappingsService {
 
   }
 
-  getComment(snapshot: any): IComment {
+  getComment(snapshot: any, commentKey: string): IComment {
+
     let comment: IComment;
+    
     if(snapshot.val() == null)
       return null;
 
@@ -93,8 +93,8 @@ export class MappingsService {
         text: snapshotComment.text,
         user: snapshotComment.user,
         dateCreated: snapshotComment.dateCreated,
-        votesUp: this.itemService.groupByBoolean(snapshotComment.votes, true),
-        votesDown:this.itemService.groupByBoolean(snapshotComment.votes, false)
+        votesUp: this.itemsService.groupByBoolean(snapshotComment.votes, true),
+        votesDown:this.itemsService.groupByBoolean(snapshotComment.votes, false)
       };
 
     return comment;

@@ -46,7 +46,7 @@ export class TabsPage implements OnInit {
       }
     });
 
-    self.events.subscribe('thread:created', (threadData) => {
+    self.events.subscribe('thread:viewed', (threadData) => {
       self.newThreads = '';
     });
   }
@@ -54,7 +54,7 @@ export class TabsPage implements OnInit {
   clicked() {
     var self = this;
 
-    if (self.newThreads === '') {
+    if (self.newThreads !== '') {
       // code...
       self.events.publish('threads:add');
       self.newThreads = '';

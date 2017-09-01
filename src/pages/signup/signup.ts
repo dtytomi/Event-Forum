@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
-import { FORM_DIRECTIVES, FormBuilder, FormGroup, Validator, AbstractControl } from '@angular/forms';
+import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
-import {AuthService} from '../../shared/services/auth.service';
-import {DataService} from '../../shared/services/data.service';
-import { IThread, UserCredentials } from '../../shared/interfaces';
-import { CheckedValidator } from '../../shared/validators/checked.validator';
-import { EmailValidator } from '../../shared/validators/email.validator';
+import {AuthService} from '../../app/shared/services/auth.service';
+import {DataService} from '../../app/shared/services/data.service';
+import { UserCredentials } from '../../app/shared/interfaces';
+import { CheckedValidator } from '../../app/shared/validators/checked.validator';
+import { EmailValidator } from '../../app/shared/validators/email.validator';
 
 /**
  * Generated class for the Signup page.
@@ -17,10 +17,9 @@ import { EmailValidator } from '../../shared/validators/email.validator';
 @IonicPage()
 @Component({
   selector: 'page-signup',
-  templateUrl: 'signup.html',
-  directives: [FORM_DIRECTIVES]
+  templateUrl: 'signup.html'
 })
-export class Signup implements OnInit {
+export class SignupPage implements OnInit {
 
   createFirebaseAccountForm: FormGroup;
   username: AbstractControl;
@@ -36,9 +35,9 @@ export class Signup implements OnInit {
 
   ngOnInit() {
     this.createFirebaseAccountForm = this.fb.group({
-      'username': ['', Validators.compose([Validators.required, Validators.minLenght(8)])],
+      'username': ['', Validators.compose([Validators.required, Validators.minLength(8)])],
       'email': ['', Validators.compose([Validators.required, EmailValidator.isValid])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLenght(5)])],
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(5)])],
       'dateOfBirth': [new Date().toString().slice(0, 10), Validator.compose([Validator.required])],
       'terms': [false, CheckedValidator.isChecked]
     });
@@ -57,7 +56,7 @@ export class Signup implements OnInit {
     let mm = now.getMonth() + 1;
     let dd = now.getDate();
 
-    let formattedDate = [now.getFullYear(), !mm[1] && mm, !dd[1] && 0, dd].join(-1);
+    let formattedDate = [now.getFullYear(), !mm[1] && mm, !dd[1] && '0', dd].join('-');
     return formattedDate;
   }
 
@@ -82,7 +81,7 @@ export class Signup implements OnInit {
         .then(function  (result) {
           // body...
           self.authService.addUser(signupForm.username, signupForm.dateOfBirth,
-            self.authService.getLoggedInUser.uid);
+            self.authService.getLoggedInUser().uid);
           loader.dismiss()
             .then(() => {
               self.viewCtrl.dismiss({
@@ -94,7 +93,7 @@ export class Signup implements OnInit {
                   position: 'top'
                 });
                 toast.present();
-                self.createAndUploadDefaultImage();
+                self.CreateAndUploadDefaultImage();
               });
             });
         }).catch(function (error) {
@@ -104,7 +103,7 @@ export class Signup implements OnInit {
           console.error(error);
           loader.dismiss().then(() => {
             let toast = self.toastCtrl.create({
-              message: 'Account created successful',
+              message: errorMessage,
                   duration: 4000,
                   position: 'top'
                 });
@@ -116,7 +115,7 @@ export class Signup implements OnInit {
 
   CreateAndUploadDefaultImage() {
     let self = this;
-    let imageData = 'image/profile.png';
+    let imageData = 'assets/images/profile.png';
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', imageData, true);
@@ -156,7 +155,7 @@ export class Signup implements OnInit {
    uploadTask.on('state_changed', 
         function  (snapshot) {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded 
-          progress = (snapshot.bytestTransfered / snapshot.totalBytes) * 100;
+          progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         }, function  (error) {
             loader.dismiss().then(() => {
               switch (error.code) {

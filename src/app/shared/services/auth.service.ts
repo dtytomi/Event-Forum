@@ -1,13 +1,15 @@
-import {injectables} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 import { UserCredentials } from '../interfaces';
 
 declare var firebase: any;
 
-@injectables()
+@Injectable()
 export class AuthService  {
-  
+    
+  usersRef: any = firebase.database().ref('users');
+
   constructor() {  }
 
   registeredUser(user: UserCredentials) {
@@ -23,7 +25,7 @@ export class AuthService  {
   }
 
   addUser(username: string, dateOfBirth: string, uid: string) {
-    this.userRef.child(uid).update({
+    this.usersRef.child(uid).update({
       username: username,
       dateOfBirth: dateOfBirth
     });

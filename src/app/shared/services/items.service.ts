@@ -16,7 +16,7 @@ export class ItemsService {
     return <T[]> _.reverse(array);
   }
 
-  groupByBoolean (Object, value: boolean): number {
+  groupByBoolean (object, value: boolean): number {
     let result: number = 0;
     if (object == null) 
       return result;
@@ -29,7 +29,7 @@ export class ItemsService {
     return result;
   }
 
-  includesItem<T>(array: Array<T>, predicate: Predicate<T>, item: T) {
+  includesItem<T>(array: Array<T>, predicate: Predicate<T>) {
     let result = _.filter(array, predicate);
     return result.length > 0;
   }
@@ -46,7 +46,5 @@ export class ItemsService {
       array.push(item);
     }
   }
-
-
 
 }

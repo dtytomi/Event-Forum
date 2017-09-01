@@ -16,9 +16,9 @@
       {{thread.question}}
     </div>
 
-    <ion-row>
+    <ion-row class="left-border-primary">
       <ion-col>
-        <button ion-button small clear (click)="viewComments(thread.key)">
+        <button color="primary" ion-button small clear (click)="viewComments(thread.key)">
           <ion-icon name="quote"></ion-icon>
           <div>{{thread.comments}} Comments</div>
         </button>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import {InAppBrowser } from '@ionic-native/in-app-browser';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+
 
 /**
  * Generated class for the AboutPage page.
@@ -14,11 +15,14 @@ import {InAppBrowser } from '@ionic-native/in-app-browser';
 })
 export class AboutPage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, private iab: InAppBrowser) {
   }
 
   openUrl(url) {
-  	let browser = new InAppBrowser(url, '_blank', 'location=yes');
+  	let browser = this.iab.create(url, '_blank', 'location=yes');
+
+    browser.close();
+    
   }
 
 }

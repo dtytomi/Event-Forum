@@ -8,7 +8,7 @@ export class ItemsService {
 
   constructor() { }
 
-  getKeys(object): String[] {
+  getKeys(object): string[] {
     return _.keysIn(object);
   }
 

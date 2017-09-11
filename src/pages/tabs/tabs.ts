@@ -1,16 +1,18 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NavController, Events, Tabs} from '@ionic-angular';
+import { NavController, Events, Tabs } from 'ionic-angular';
 
 
-import {ThreadsPage} from '../threads/threads';
-import {ProfilePage} from '../profile/profile';
-import {AboutPage} from '../about/about';
+import { ThreadsPage } from '../threads/threads';
+import { ProfilePage } from '../profile/profile';
+import { AboutPage } from '../about/about';
 import { AuthService } from '../../shared/services/auth.service';
 
 
 @Component({
-  templateUrl: 'build/pages/tabs/tabs.html'
+
+  templateUrl: 'tabs.html'
 })
+
 export class TabsPage implements OnInit {
   
   private threadsPage: any;
@@ -25,7 +27,8 @@ export class TabsPage implements OnInit {
     public events: Events) {
     // this tells the tabs component which Pages
     // should be each tab's root Page
-      this.threadPage = ThreadPage;
+
+      this.threadsPage = ThreadsPage;
       this.profilePage = ProfilePage;
       this.aboutPage = AboutPage
   }

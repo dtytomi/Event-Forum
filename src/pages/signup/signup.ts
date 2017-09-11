@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ViewController, ToastController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
-import {AuthService} from '../../app/shared/services/auth.service';
-import {DataService} from '../../app/shared/services/data.service';
-import { UserCredentials } from '../../app/shared/interfaces';
-import { CheckedValidator } from '../../app/shared/validators/checked.validator';
-import { EmailValidator } from '../../app/shared/validators/email.validator';
+import { AuthService } from '../../shared/services/auth.service';
+import { DataService } from '../../shared/services/data.service';
+import { UserCredentials } from '../../shared/interfaces';
+import { CheckedValidator } from '../../shared/validators/checked.validator';
+import { EmailValidator } from '../../shared/validators/email.validator';
 
 /**
  * Generated class for the Signup page.
@@ -14,7 +14,7 @@ import { EmailValidator } from '../../app/shared/validators/email.validator';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
-@IonicPage()
+
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html'
@@ -28,17 +28,18 @@ export class SignupPage implements OnInit {
   dateOfBirth: AbstractControl;
   terms: AbstractControl;
 
-  constructor(private navCtrl: NavController, private loadingCtrl: LoadingController,
-      private toastCtrl: ToastController, private viewCtrl: ViewController,
-      private fb: FormBuilder, private dataService: DataService,
-      private authService: AuthService) {  }
+  constructor(private navCtrl: NavController, 
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController, private viewCtrl: ViewController,
+    private fb: FormBuilder, private dataService: DataService,
+    private authService: AuthService) {  }
 
   ngOnInit() {
     this.createFirebaseAccountForm = this.fb.group({
       'username': ['', Validators.compose([Validators.required, Validators.minLength(8)])],
       'email': ['', Validators.compose([Validators.required, EmailValidator.isValid])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(5)])],
-      'dateOfBirth': [new Date().toString().slice(0, 10), Validator.compose([Validator.required])],
+      'dateOfBirth': [new Date().toString().slice(0, 10), Validators.compose([Validators.required])],
       'terms': [false, CheckedValidator.isChecked]
     });
 
@@ -120,10 +121,10 @@ export class SignupPage implements OnInit {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', imageData, true);
     xhr.responseType = 'blob';
-    xhr.onLoad = function (e) {
-      if (this.status === 200) {
+    xhr.onload = function (e) {
+      if (xhr.status === 200) {
         
-        var myBlob = this.response;
+        var myBlob = xhr.response;
         // myBlob is now the blob that the object URL pointed to.
         self.startUploading(myBlob);
       }
@@ -149,7 +150,7 @@ export class SignupPage implements OnInit {
      cacheControl: 'no-cache'
    };
 
-   var uploadTask = self.dataservice.getStorageRef().child('images/' + uid + '/profile.png').put(fiile, metadata);
+   var uploadTask = self.dataService.getStorageRef().child('images/' + uid + '/profile.png').put(file, metadata);
 
    // Listen for state changes, errors, and completion of the upload.
    uploadTask.on('state_changed', 

@@ -53,7 +53,7 @@
 	  			<ion-col>
 	  				<ion-col center text-center>
 	  					<ion-note>
-	  						{{comment.dateCreated | amTimeAgo: true }}
+	  						{{comment.dateCreated | date:"MM/dd/yy" }}
 	  					</ion-note>
 	  				</ion-col>
 	  			</ion-col>
@@ -62,9 +62,9 @@
 	  	</ion-card>
 	  </ion-item>
 	</ion-list>
-	<ion-fixed class="fixed-div">
-		<button fab primary fab-bottom fab-right class="fab-footer" (click)="createComment()">
-			<ion-icon name="create" is-active="false"></ion-icon>
-		</button>
-	</ion-fixed>
+	
+  <ion-fab right bottom>
+    <button ion-fab color="primary"><ion-icon name="create" (click)="createComment()"></ion-icon></button>
+  </ion-fab>
+
 </ion-content>

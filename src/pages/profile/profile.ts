@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
-import { Camera, CameraOptions } from 'ionic-native';
+import { NavController, LoadingController, ActionSheetController } from 'ionic-angular';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
-import { IUser } from '../../app/shared/interfaces';
-import { UserAvatarComponent } from '../../app/shared/directives/user-avatar.component';
-import { AuthService } from '../../app/shared/services/auth.service';
-import { DataService } from '../../app/shared/services/data.service';
+import { IUser } from '../../shared/interfaces';
+import { AuthService } from '../../shared/services/auth.service';
+import { DataService } from '../../shared/services/data.service';
+
 
 /**
  * Generated class for the ProfilePage page.
@@ -25,10 +25,12 @@ export class ProfilePage implements OnInit {
   firebaseAccount: any = {};
   userStatistics: any = {};
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController,
-      public toastCtrl: ToastController, public viewCtrl: ViewController,
-      public fb: FormBuilder, public dataService: DataService,
-      public authService: AuthService ) {
+
+  constructor(public navCtrl: NavController, 
+    public loadingCtrl: LoadingController,
+    public actionSheetCtrl: ActionSheetController, 
+    public dataService: DataService, private camera: Camera,
+    public authService: AuthService ) {
   }
 
   ngOnInit() {
@@ -126,14 +128,15 @@ export class ProfilePage implements OnInit {
   			text: 'Camera',
   			icon: 'camera',
   			handler: () => {
-  				self.openCamera(Camera.PictureSourceType.CAMERA);
+
+  				self.openCamera(self.camera.PictureSourceType.CAMERA);
   			}
   		},
   		{
   			text: 'Album',
   			icon: 'folder-open',
   			handler: () => {
-  				self.openCamera(Camera.PictureSourceType.PHOTOLIBRARY);
+  				self.openCamera(self.camera.PictureSourceType.PHOTOLIBRARY);
   			}
   		}]
   	});
@@ -146,16 +149,16 @@ export class ProfilePage implements OnInit {
 
   	let options: CameraOptions = {
   		quality: 95,
-  		destinationType: Camera.DestinationType.DATAURL,
+  		destinationType: self.camera.DestinationType.DATA_URL,
   		sourceType: pictureSourceType,
-  		encodingType: Camera.EncodingType.PNG,
+  		encodingType: self.camera.EncodingType.PNG,
   		targetWidth: 400,
   		targetHeight: 400,
   		saveToPhotoAlbum: true,
   		correctOrientation: true
   	};
 
-  	Camera.getPicture(options).then(imageData => {
+  	self.camera.getPicture(options).then(imageData => {
   		const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
   			const byteCharacters = 	atob(b64Data);
   			const byteArrays = [];
@@ -168,8 +171,7 @@ export class ProfilePage implements OnInit {
   					byteNumbers[i] = slice.charCodeAt(i);
   				}
 
-  				const byteArray = new Unit8Array(byteNumbers);
-
+  				const byteArray = new Uint8Array(byteNumbers);
   				byteArrays.push(byteArray)
   			}
 
@@ -180,7 +182,7 @@ export class ProfilePage implements OnInit {
   		let capturedImage: Blob = b64toBlob(imageData, 'image/png');
   		self.startUploading(capturedImage);
   	}, error => {
-  		console.log('ERROR ->' + JSON.stringfy(error));
+  		console.log('ERROR ->' + JSON.stringify(error));
   	});
   }
 

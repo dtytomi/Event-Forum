@@ -1,14 +1,17 @@
 import {Component, ViewChild, OnInit } from '@angular/core';
-import {Platform, Nav, MenuController, ViewController, Events, ModalController } from 'ionic-angular';
-import { Network, Splashscreen, StatusBar } from 'ionic-native';
+import {Platform, MenuController, ViewController, Events, ModalController } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { Subscription } from '../../node_modules/rxjs/Subscription';
 
-import { AuthService } from './shared/services/auth.service';
-import { DataService } from './shared/services/data.service';
-import { SqliteService } from './shared/services/sqlite.service';
-import {TabsPage} from '../pages/tabs/tabs';
+import { AuthService } from '../shared/services/auth.service';
+import { DataService } from '../shared/services/data.service';
+import { SqliteService } from '../shared/services/sqlite.service';
+import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
+
 
 declare var window: any;
 
@@ -18,27 +21,28 @@ declare var window: any;
 export class Eventsforum implements OnInit {
   @ViewChild('content') nav: any;
 
-  public rootPage: any;
-  public loginPage: LoginPage;
+  private rootPage: any;
+  public loginPage: LoginPage; 
 
-  connectSubscription: Subscription;
+  connectSubscription: Subscription;  
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: Splashscreen, 
-    public dataService: DataService, public authService: AuthService, public sqliteService: SqliteService,
-    public menu: MenuController, public events: Events,
-    public modalCtrl: ModalController) {
+  constructor(platform: Platform, statusBar: StatusBar, public splashScreen: SplashScreen,
+    public dataService: DataService, public authService: AuthService,
+    public sqliteService: SqliteService,  public menu: MenuController,
+    public events: Events, public modalCtrl: ModalController,
+    public network: Network ) {
 
     var self = this;
     this.rootPage = TabsPage;
 
     platform.ready().then(() => {
-       if (window.cordova) {
+      if (window.cordova) {
         // Okay, so the platform is ready and our plugins are available.
         // Here you can do any higher level native things you might need.
-        StatusBar.styleDefault();
+        statusBar.styleDefault();
         self.watchForConnection();
         self.watchForDisconnect();
-        Splashscreen.hide();
+        splashScreen.hide();
 
         console.log('in ready..');
         let array: string[] = platform.platforms();
@@ -48,9 +52,9 @@ export class Eventsforum implements OnInit {
     });
   }
 
-  watchForConnection() {
+    watchForConnection() {
     var self = this;
-    Network.onConnect().subscribe(() => {
+    self.network.onConnect().subscribe(() => {
       console.log('network connected!');
       // We just got a connection but we need to wait briefly
       // before we determine the connection type.  Might need to wait
@@ -67,7 +71,7 @@ export class Eventsforum implements OnInit {
   watchForDisconnect() {
     var self = this;
     // watch network for a disconnect
-    Network.onDisconnect().subscribe(() => {
+    self.network.onDisconnect().subscribe(() => {
       console.log('network was disconnected :-(');
       console.log('Firebase: Go Offline..');
       //self.sqliteService.resetDatabase();
@@ -77,9 +81,9 @@ export class Eventsforum implements OnInit {
   }
 
   hideSplashScreen() {
-    if (Splashscreen) {
+    if (this.splashScreen) {
       setTimeout(() => {
-        Splashscreen.hide();
+        this.splashScreen.hide();
       }, 100);
     }
   }
@@ -123,6 +127,5 @@ export class Eventsforum implements OnInit {
     let user = this.authService.getLoggedInUser();
     return user !== null;
   }
-
 }
 

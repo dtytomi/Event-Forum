@@ -13,6 +13,10 @@ log.txt
 npm-debug.log*
 
 .idea/
+<<<<<<< a512b0104ec3eee8adfee55d1071779cbb606e01
+=======
+.sourcemaps/
+>>>>>>>  newly created
 .sass-cache/
 .tmp/
 .versions/

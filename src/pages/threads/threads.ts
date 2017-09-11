@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController, NavController, ToastController, Content, Events } from 'ionic-angular';
 
-import { AuthService } from '../../app/shared/services/auth.service';
-import { DataService } from '../../app/shared/services/data.service';
-import { IThread } from '../../app/shared/interfaces';
-import { ItemsService } from '../../app/shared/services/items.service';
-import { MappingsService } from '../../app/shared/services/mappings.service';
-import { SqliteService } from '../../app/shared/services/sqlite.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { DataService } from '../../shared/services/data.service';
+import { IThread } from '../../shared/interfaces';
+import { ItemsService } from '../../shared/services/items.service';
+import { MappingsService } from '../../shared/services/mappings.service';
+import { SqliteService } from '../../shared/services/sqlite.service';
 import { ThreadCreatePage } from '../thread-create/thread-create';
 import { ThreadCommentsPage } from '../thread-comments/thread-comments';
 
@@ -34,7 +34,7 @@ export class ThreadsPage implements OnInit {
 
 	public threads: Array<IThread> = [];
 	public newThreads: Array<IThread> = [];
-	public favoriteThreadsKeys: string[];
+	public favoriteThreadKeys: string[];
 
   public firebaseConnectionAttempts: number = 0;
 
@@ -42,7 +42,7 @@ export class ThreadsPage implements OnInit {
       public toastCtrl: ToastController, public dataService: DataService,
       public mappingsService: MappingsService,
       public authService: AuthService, public events: Events, 
-      public sqliteService: SqliteService ) {
+      public sqliteService: SqliteService, public itemsService: ItemsService ) {
   }
 
   ngOnInit() {
@@ -141,8 +141,8 @@ export class ThreadsPage implements OnInit {
   	// fetch new thread
   	self.dataService.getThreadsRef().orderByPriority().equalTo(priority).once('value').then(function (dataSnapshot) {
   		// body...
-  		let key = Object.Keys(dataSnapshot.val())[0];
-  		let newThreads: IThread = self.mappingsService.getThread(dataSnapshot.val()[key], key);
+  		let key = Object.keys(dataSnapshot.val())[0];
+  		let newThread: IThread = self.mappingsService.getThread(dataSnapshot.val()[key], key);
   		self.newThreads.push(newThread);
   	});
   }
@@ -157,6 +157,37 @@ export class ThreadsPage implements OnInit {
   	self.newThreads = [];
   	self.scrollToTop();
   	self.events.publish('threads:viewed');
+  }
+
+  loadThreads(fromStart: boolean) {
+    var self = this;
+
+    if (fromStart) { 
+      // code...
+      self.loading = true;
+      self.threads = [];
+      self.newThreads = [];
+
+      if (self.segment === 'all') { 
+        this.dataService.getTotalThreads().then(function (snapshot) {
+          self.start = snapshot.val();
+          self.getThreads();
+        })
+      } else {
+         self.start = 0;
+         self.favoriteThreadKeys = [];
+         self.dataService.getFavoriteThreads(self.authService.getLoggedInUser().uid).then(function (dataSnapshot) {
+           let favoriteThreads = dataSnapshot.val();
+           self.itemsService.getKeys(favoriteThreads).forEach(function (threadKey) {
+             self.start++;
+             self.favoriteThreadKeys.push(threadKey);
+           });
+           self.getThreads();
+         });    
+      }
+    } else {
+      self.getThreads();
+    }
   }
 
   getThreads() {
@@ -177,7 +208,8 @@ export class ThreadsPage implements OnInit {
   			self.loading = false;
   		});
   	} else {
-  		self.favoriteThreadsKeys.forEach(key => {
+
+  		self.favoriteThreadKeys.forEach(key => {
   			this.dataService.getThreadsRef().child(key).once('value')
   				.then(function (dataSnapshot) {
   					self.threads.unshift(self.mappingsService.getThread(dataSnapshot.val(), key));
@@ -242,7 +274,7 @@ export class ThreadsPage implements OnInit {
   }
 
   viewComments(key: string) {
-  	if (this.connected) {
+  	if (this.internetConnected) {
   		this.navCtrl.push(ThreadCommentsPage, {
   			threadKey: key
   		});

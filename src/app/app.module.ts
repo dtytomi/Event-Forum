@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 // Pages
 import { Eventsforum } from './app.component';
@@ -19,11 +19,12 @@ import { ThreadCreatePage } from '../pages/thread-create/thread-create';
 import { ThreadsPage } from '../pages/threads/threads';
 
 // Custom
-import { ThreadComponent } from './shared/directives/thread-component';
-import { UserAvatarComponent } from './shared/directives/user-avatar-component';
+import { ThreadComponent } from '../shared/directives/thread.component';
+import { UserAvatarComponent } from '../shared/directives/user-avatar.component';
 
 // Providers
-import { APP_PROVIDER } from '../providers/app.providers';
+import { APP_PROVIDERS } from '../providers/app.providers';
+>>>>>>>  newly created
 
 @NgModule({
   declarations: [
@@ -65,7 +66,7 @@ import { APP_PROVIDER } from '../providers/app.providers';
   providers: [
     StatusBar,
     SplashScreen,
-    APP_PROVIDER,
+    APP_PROVIDERS,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { ViewController, LoadingController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
-import {AuthService} from '../../app/shared/services/auth.service';
-import {DataService} from '../../app/shared/services/data.service';
-import { IThread } from '../../app/shared/interfaces';
+import {AuthService} from '../../shared/services/auth.service';
+import {DataService} from '../../shared/services/data.service';
+import { IThread } from '../../shared/interfaces';
 
 /**
  * Generated class for the ThreadCreatePage page.
@@ -23,9 +23,9 @@ export class ThreadCreatePage implements OnInit {
   question: AbstractControl;
   category: AbstractControl;
 
-  constructor(private navCtrl: NavController, private loadingCtrl: LoadingController,
-      private viewCtrl: ViewController, private fb: FormBuilder, private dataService: DataService,
-      private authService: AuthService) {
+  constructor(private loadingCtrl: LoadingController,
+    private viewCtrl: ViewController, private fb: FormBuilder, private dataService: DataService,
+    private authService: AuthService) {
   }
 
   ngOnInit() {

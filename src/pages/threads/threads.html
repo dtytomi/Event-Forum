@@ -11,12 +11,12 @@
 	  	<ion-icon name="menu"></ion-icon>
 	  </button>
 	  <ion-segment [(ngModel)]="segment" (ionChange)="filterThreads(segment)">
-	  	<ion-segment-buttom value="all">
+	  	<ion-segment-button value="all">
 	  		All
-	  	</ion-segment-buttom>
-	  	<ion-segment-buttom value="favorites">
+	  	</ion-segment-button>
+	  	<ion-segment-button value="favorites">
 	  		Favorites
-	  	</ion-segment-buttom>
+	  	</ion-segment-button>
 	  </ion-segment>
 
 	  <ion-buttons end>
@@ -38,7 +38,7 @@
 
 
 <ion-content>
-	<ion-refresher (ionRefresh)="reloadThreads(%event)" *ngIf="segment=='all'" >
+	<ion-refresher (ionRefresh)="reloadThreads($event)" *ngIf="segment=='all'" >
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
 

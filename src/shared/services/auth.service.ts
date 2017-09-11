@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
 
 import { UserCredentials } from '../interfaces';
 
@@ -12,7 +11,7 @@ export class AuthService  {
 
   constructor() {  }
 
-  registeredUser(user: UserCredentials) {
+  registerUser(user: UserCredentials) {
     return firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
   }
 

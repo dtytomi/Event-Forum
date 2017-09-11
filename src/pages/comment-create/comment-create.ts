@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal, ViewController, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { ViewController, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
-import {AuthService} from '../../app/shared/services/auth.service';
-import {DataService} from '../../app/shared/services/data.service';
-import { IUser, IComment } from '../../app/shared/interfaces';
+import {AuthService} from '../../shared/services/auth.service';
+import {DataService} from '../../shared/services/data.service';
+import { IUser, IComment } from '../../shared/interfaces';
+
 
 /**
  * Generated class for the CommentCreatePage page.
@@ -23,9 +24,13 @@ export class CommentCreatePage implements OnInit {
   threadKey: string;
  	loaded: boolean = false;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController,
-      public viewCtrl: ViewController, public fb: FormBuilder, public dataService: DataService,
-      public authService: AuthService, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+      public loadingCtrl: LoadingController,
+      public viewCtrl: ViewController, 
+      public fb: FormBuilder, public dataService: DataService,
+      public authService: AuthService, 
+      public navParams: NavParams) {
+
   }
 
   ngOnInit() {
@@ -50,7 +55,8 @@ export class CommentCreatePage implements OnInit {
   	if (this.createCommentForm.valid) {
 
   		let loader = this.loadingCtrl.create({
-  			content: 'Posting comment',
+
+  			content: 'Posting comment...',
   			dismissOnPageChange: true
   		});
 
@@ -62,13 +68,13 @@ export class CommentCreatePage implements OnInit {
 
   			let commentRef = self.dataService.getCommentsRef().push();
   			let commentKey: string = commentRef.key;
-  			let user: IUser = {uid: uid, username: username};
 
+  			let user: IUser = { uid: uid, username: username };
   			let newComment: IComment = {
   				key: commentKey,
   				text: commentForm.comment,
   				thread: self.threadKey,
-  				user: user,
+  				user: String(user),
   				dateCreated: new Date().toString(),
   				votesUp: null,
   				votesDown: null

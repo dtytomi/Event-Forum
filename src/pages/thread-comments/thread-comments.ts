@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, ModalController, ToastController, LoadingController, NavParams, Content } from 'ionic-angular';
 
 import { CommentCreatePage } from '../comment-create/comment-create';
-import { IComment } from '../../app/shared/interfaces';
-import { AuthService } from '../../app/shared/services/auth.service';
-import { DataService } from '../../app/shared/services/data.service';
-import { ItemsService } from '../../app/shared/services/items.service';
-import { MappingsService } from '../../app/shared/services/mappings.service';
+import { IComment } from '../../shared/interfaces';
+import { AuthService } from '../../shared/services/auth.service';
+import { DataService } from '../../shared/services/data.service';
+import { ItemsService } from '../../shared/services/items.service';
+import { MappingsService } from '../../shared/services/mappings.service';
 
 @Component({
     templateUrl: 'thread-comments.html'

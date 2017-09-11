@@ -4,9 +4,9 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 
 import { TabsPage } from '../tabs/tabs';
 import { SignupPage } from '../signup/signup';
-import {AuthService} from '../../app/shared/services/auth.service';
-import {DataService} from '../../app/shared/services/data.service';
-import { IThread, UserCredentials } from '../../app/shared/interfaces';
+import {AuthService} from '../../shared/services/auth.service';
+import {DataService} from '../../shared/services/data.service';
+import { IThread, UserCredentials } from '../../shared/interfaces';
 
 /**
  * Generated class for the LoginPage page.
@@ -24,10 +24,12 @@ export class LoginPage implements OnInit {
 	email: AbstractControl;
 	password: AbstractControl;
 
-  constructor(private navCtrl: NavController, private loadingCtrl: LoadingController,
-      private toastCtrl: ToastController, private viewCtrl: ViewController,
-      private fb: FormBuilder, private dataService: DataService,
-      private authService: AuthService) {
+  constructor(private navCtrl: NavController, 
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController, 
+    private viewCtrl: ViewController,
+    private fb: FormBuilder, private dataService: DataService,
+    private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -51,8 +53,10 @@ export class LoginPage implements OnInit {
       });
 
       let user: UserCredentials = {
-        email: signupForm.email,
-        password: signupForm.password
+
+        email: signInForm.email,
+        password: signInForm.password
+
       };
 
       loader.present();

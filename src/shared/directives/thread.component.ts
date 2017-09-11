@@ -1,11 +1,11 @@
 import  { Component, EventEmitter, OnInit, OnDestroy, Input, Output } from '@angular/core';
 
-import { IThread } from '../../interfaces';
-import { DataService } from '../data.service';
+import { IThread } from '../interfaces';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'forum-thread',
-  templateUrl: 'build/shared/directives/thread.component.html'
+  templateUrl: 'thread.component.html'
 })
 export class ThreadComponent implements OnInit, OnDestroy {
     @Input() thread:IThread;

@@ -24,7 +24,6 @@ import { UserAvatarComponent } from '../shared/directives/user-avatar.component'
 
 // Providers
 import { APP_PROVIDERS } from '../providers/app.providers';
->>>>>>>  newly created
 
 @NgModule({
   declarations: [

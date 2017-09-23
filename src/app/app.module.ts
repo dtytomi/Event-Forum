@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
@@ -65,6 +66,7 @@ import { APP_PROVIDERS } from '../providers/app.providers';
   providers: [
     StatusBar,
     SplashScreen,
+    Network,
     APP_PROVIDERS,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
